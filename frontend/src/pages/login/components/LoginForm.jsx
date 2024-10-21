@@ -2,10 +2,6 @@
 
 import { Box, TextField, Button, FormControl, FormHelperText, Typography, Paper } from "@mui/material";
 
-import { Link as RouterLink } from "react-router-dom";
-
-const role= 'student'
-
 const LoginForm = ({ onSubmit, register, errors, isSubmitting }) => {
   return (
     <Paper elevation={24} sx={{ padding: 4, width: '80%', mt: "100px", maxWidth: 400, backgroundColor: "#8697C4" }}>
@@ -48,7 +44,7 @@ const LoginForm = ({ onSubmit, register, errors, isSubmitting }) => {
           <FormHelperText>{errors.Password?.message}</FormHelperText>
         </FormControl>
 
-        <Button component={RouterLink} to={`/dashboard/${role}`} variant="contained" type="submit" disabled={isSubmitting}>
+        <Button variant="contained" type="submit" disabled={isSubmitting}>
           Login
         </Button>
       </Box>
