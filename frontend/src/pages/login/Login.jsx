@@ -1,41 +1,44 @@
-// RegisterPage.js
-import { useForm } from "react-hook-form";
-import PageLayout from "../../components/PageLayout";
-import LoginForm from "./components/LoginForm";
-import axios from "axios";
+import { useForm } from 'react-hook-form';
+import PageLayout from '../../components/PageLayout';
+import LoginForm from './components/LoginForm';
+import useAxios from '../../components/useAxios';
 
 function LoginPage() {
+
   const {
     register,
     handleSubmit,
     reset,
-    formState: { errors, isSubmitting }
-  } = useForm();
+    formState: { errors, isSubmitting },
+  } = useForm();  
+
+  const { response, error, loading, fetchData } = useAxios(); 
 
   const onSubmit = async (data) => {
-    try{
-      const response= await axios.post("http://localhost:8080/api/auth/login",{
-        userName:data.Username,
-        password:data.Password
-      })
-      const token = response.headers['authorization'];
+    await fetchData({
+      url: '/api/auth/login',
+      method: 'POST',
+      data: {
+        userName: data.Username,
+        password: data.Password,
+      },
+    });    
 
+    if (response) {
+      console.log(response.headers);
+      const token = response.headers['authorization'];
       if (token) {
         localStorage.setItem('accessToken', token);
-        console.log("Token stored successfully:", token);
+        console.log('Token stored successfully:', token);
       } else {
-        console.error("No token found in headers");
+        console.log('Token not found in headers');
       }
-
       reset();
-
+    }    if (error) {
+      console.error('Login error:', error);
     }
-    catch(error){
-      console.log(error)
-
-    }
-  };
-
+  };  
+  
   return (
     <PageLayout>
       <LoginForm
@@ -46,6 +49,5 @@ function LoginPage() {
       />
     </PageLayout>
   );
-}
 
-export default LoginPage;
+}export default LoginPage;
