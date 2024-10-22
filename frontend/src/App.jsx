@@ -16,15 +16,15 @@ function App() {
     {
       path: "/dashboard",
       children: [
-        { path: "superadmin", element: <SuperAdminDashboard /> },
-        { path: "admin", element: <AdminDashboard /> },
-        { path: "student", element: <StudentDashboard /> },
+        { path: "SUPERADMIN", element: <SuperAdminDashboard /> },
+        { path: "ADMIN", element: <AdminDashboard /> },
+        { path: "STUDENT/:studentId", element: <StudentDashboard /> },
       ],
     },
 
     { path: "/courseView/:courseId", element: <CourseView /> },
   ]);
-
+  
   return <RouterProvider router={router} />;
 }
 

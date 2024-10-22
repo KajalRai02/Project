@@ -1,53 +1,52 @@
-import { useForm } from 'react-hook-form';
-import PageLayout from '../../components/PageLayout';
-import LoginForm from './components/LoginForm';
-import useAxios from '../../components/useAxios';
+import { useForm } from "react-hook-form";
+import PageLayout from "../../components/PageLayout";
+import LoginForm from "./components/LoginForm";
+import useAxios from "../../components/useAxios";
+import { useNavigate } from "react-router-dom";
+
+let role
+let id
 
 function LoginPage() {
 
+  const navigate= useNavigate()
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors, isSubmitting },
-  } = useForm();  
-
-  const { response, error, loading, fetchData } = useAxios(); 
-
+  } = useForm(); 
+  
+  const {  loading,error,fetchData } = useAxios(); 
+  
   const onSubmit = async (data) => {
-    await fetchData({
-      url: '/api/auth/login',
-      method: 'POST',
+    const response = (await fetchData({
+      url: "/api/auth/login",
+      method: "POST",
       data: {
         userName: data.Username,
         password: data.Password,
       },
-    });    
+    })).data;
 
-    if (response) {
-      console.log(response.headers);
-      const token = response.headers['authorization'];
-      if (token) {
-        localStorage.setItem('accessToken', token);
-        console.log('Token stored successfully:', token);
-      } else {
-        console.log('Token not found in headers');
-      }
-      reset();
-    }    if (error) {
-      console.error('Login error:', error);
-    }
-  };  
+    role=response.roles
+    id= response.id
+
+    navigate(`/dashboard/${role}/${id}` )
+  
+  };
   
   return (
     <PageLayout>
+      
+      {loading && <p>Loading...</p>}
+      {error && <p>Error: {error}</p>}
       <LoginForm
         onSubmit={handleSubmit(onSubmit)}
         register={register}
         errors={errors}
         isSubmitting={isSubmitting}
+        id= {id}
       />
     </PageLayout>
   );
-
 }export default LoginPage;
