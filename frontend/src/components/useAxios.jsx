@@ -1,62 +1,104 @@
-import axios from 'axios';
-import { useEffect, useState } from 'react';
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 const useAxios = () => {
-    const [response, setResponse] = useState(null);
-    const [error, setError] = useState('');
-    const [loading, setLoading] = useState(false);  
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [token, setToken] = useState("");
 
-    const axiosInstance = axios.create({
-        baseURL: 'http://localhost:8080',
-        withCredentials: true,
-    });  
+  const axiosInstance = axios.create({
+    baseURL: "http://localhost:8080",
+    withCredentials: true,
+  });
 
-    axiosInstance.interceptors.request.use(
-        (config) => {
+
+  useEffect(() => {
+    const requestInterceptor = axiosInstance.interceptors.request.use(
+      (config) => {
+        if (token) {
+          config.headers["Authorization"] = `Bearer ${token}`;
+        }
         return config;
-        },
-        (error) => {
-        return Promise.reject(error);
-        }
-    ); 
+      },
+      (error) => Promise.reject(error)
+    );
 
-    axiosInstance.interceptors.response.use(
-        (response) => {
+
+    const responseInterceptor = axiosInstance.interceptors.response.use(
+      (response) => {
+        const newToken = response.headers["authorization"];
+        if (newToken) {
+          localStorage.setItem("accessToken", newToken);
+          setToken(newToken);
+        }
         return response;
-        },
-        (error) => {
-        return Promise.reject(error);
-        }
-    );  
-    let controller = new AbortController();  
+      },
+      async (error) => {
+        const originalRequest = error.config;
+        if (
+          error.response?.status === 403 &&
+          error.response.data?.message === "Invalid Access Token"
+        ) {
+          try {
+            const refreshResponse = await fetchData({
+              url: "/api/auth/refresh-Token",
+              method: "POST",
+            });
 
-    useEffect(() => {
-        return () => controller?.abort();
-    }, []); 
+            const newAccessToken = refreshResponse.headers["authorization"];
+            if (newAccessToken) {
+              localStorage.setItem("accessToken", newAccessToken);
+              setToken(newAccessToken);
+
+              // Retry the original request with the new token
+              originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
+              return axiosInstance(originalRequest);
+
+            } else {
+              clearAuth();
+            }
+          } catch  {
+            clearAuth(); 
+          }
+        }
+
+        return Promise.reject(error);
+      }
+    );
     
-    const fetchData = async ({ url, method, data = {}, params = {} }) => {
-        setLoading(true);
-        controller.abort();
-        controller = new AbortController();    try {
-        const result = await axiosInstance({
-            url,
-            method,
-            data,
-            params,
-            signal: controller.signal,
-        });
-        setResponse(result);
-        } catch (error) {
-        if (axios.isCancel(error)) {
-            console.error('Request cancelled', error.message);
-        } else {
-            setError(error.response ? error.response.data : error.message);
-        }
-        } finally {
-        setLoading(false);
-        }
-    };  
-    return { response, error, loading, fetchData };
+    return () => {
+      axiosInstance.interceptors.request.eject(requestInterceptor);
+      axiosInstance.interceptors.response.eject(responseInterceptor);
+    };
+  }, [token]);
+
+  const clearAuth = () => {
+    localStorage.removeItem("accessToken");
+    setToken("");
+    // Additional logout logic, if needed
+  };
+
+  const fetchData = async ({ url, method, data = {}, params = {} }) => {
+    setLoading(true);
+    setError("");
+
+    try {
+      const result = await axiosInstance({
+        url,
+        method,
+        data,
+        params,
+      });
+      return result;
+    } catch (error) {
+      setError(error.response ? error.response.data : error.message);
+   
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { error, loading, fetchData };
 };
 
 export default useAxios;

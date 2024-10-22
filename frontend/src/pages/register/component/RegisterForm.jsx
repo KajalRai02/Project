@@ -23,7 +23,7 @@ const RegisterForm = ({ onSubmit, register, errors, isSubmitting }) => {
       >
         <FormControl>
           <TextField
-            id="outlined-required"
+            id="outlined-username"
             label="Username"
             {...register("Username", {
               required: "Username is required",
@@ -52,7 +52,7 @@ const RegisterForm = ({ onSubmit, register, errors, isSubmitting }) => {
         <FormControl>
           <TextField
             type="password"
-            id="outlined-required"
+            id="outlined-password"
             label="Password"
             {...register("Password", {
               required: "Password is required",
@@ -63,7 +63,7 @@ const RegisterForm = ({ onSubmit, register, errors, isSubmitting }) => {
           <FormHelperText>{errors.Password?.message}</FormHelperText>
         </FormControl>
 
-        <Button component={RouterLink} to='/login' variant="contained" type="submit" disabled={isSubmitting}>
+        <Button  variant="contained" type="submit" disabled={isSubmitting}>
           Sign up
         </Button>
       </Box>

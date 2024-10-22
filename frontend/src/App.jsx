@@ -16,9 +16,9 @@ function App() {
     {
       path: "/dashboard",
       children: [
-        { path: "superadmin", element: <SuperAdminDashboard /> },
-        { path: "admin", element: <AdminDashboard /> },
-        { path: "student", element: <StudentDashboard /> },
+        { path: "SUPER_ADMIN", element: <SuperAdminDashboard /> },
+        { path: "ADMIN", element: <AdminDashboard /> },
+        { path: "STUDENT/:studentId", element: <StudentDashboard /> },
       ],
     },
 

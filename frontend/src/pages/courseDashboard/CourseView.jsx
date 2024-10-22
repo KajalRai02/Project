@@ -9,7 +9,7 @@ import { useState } from "react";
 
 import Header from "../Header";
 
-import DUMMY_COURSE from "./CourseList";
+import {DUMMY_COURSE} from "./CourseList";
 
 const theme = createTheme({
   components: {

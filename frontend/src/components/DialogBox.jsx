@@ -7,7 +7,7 @@ import {
   DialogTitle,
 } from "@mui/material";
 
-export default function DialogBox({ open, text }) {
+ function DialogBox({ open, text }) {
   function handleDelete() {
     console.log("Deleting");
   }
@@ -26,3 +26,6 @@ export default function DialogBox({ open, text }) {
     </>
   );
 }
+
+
+export default DialogBox;

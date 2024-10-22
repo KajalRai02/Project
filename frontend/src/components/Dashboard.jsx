@@ -16,7 +16,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import DialogBox from "./DialogBox";
 import { useState } from "react";
 
-export default function Dashboard({ arr, flag }) {
+ function Dashboard({ arr, flag }) {
   const [open, setOpen] = useState(false);
 
   function handleClick() {
@@ -78,3 +78,5 @@ export default function Dashboard({ arr, flag }) {
     </>
   );
 }
+
+export default Dashboard
