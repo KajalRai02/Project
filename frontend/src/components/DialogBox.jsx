@@ -7,9 +7,19 @@ import {
   DialogTitle,
 } from "@mui/material";
 
- function DialogBox({ open, text }) {
-  function handleDelete() {
-    console.log("Deleting");
+import {useDispatch} from 'react-redux'
+import { deleteCourses } from "../store/dashboardSlice";
+import useAuthService from "../services/AuthService";
+
+ function DialogBox({ open, text,id }) {
+
+  const dispatch=useDispatch()
+  const {deleteCourseById} = useAuthService()
+
+  const handleDelete= async(id)=> {
+    await deleteCourseById(id)
+    // dispatch(deleteCourses(id));
+    console.log("deleting")
   }
 
   return (
@@ -19,7 +29,7 @@ import {
           <DialogContentText>{text}</DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleDelete}>Yes</Button>
+          <Button onClick={()=> handleDelete(id)}>Yes</Button>
           <Button>No</Button>
         </DialogActions>
       </Dialog>

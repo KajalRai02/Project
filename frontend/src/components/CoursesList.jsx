@@ -1,36 +1,36 @@
 export const DUMMY_COURSES = [
     {
-      title: "JAVA",
+      courseName: "JAVA",
       image: '/Java.png',
       status: true
     },
     {
-      title: "REACT",
+      courseName: "REACT",
       image: '/React.png',
       status: true
     },
     {
-      title: "HTML",
+      courseName: "HTML",
       image: '/Html.png',
       status: false
     },
     {
-      title: "JS",
+      courseName: "JS",
       image: '/JSImg.jpg',
       status: true
     },
     {
-      title: "SPRING BOOT",
+      courseName: "SPRING BOOT",
       image: '/SpringBOOT.png',
       status: false
     },
     {
-      title: "ANGULAR",
+      courseName: "ANGULAR",
       image: '/angular.png',
       status: true
     },
     {
-      title: "CSS",
+      courseName: "CSS",
       image: '/CSS.png',
       status: true
     },

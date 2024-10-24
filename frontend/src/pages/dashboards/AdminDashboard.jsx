@@ -1,12 +1,32 @@
 import Dashboard from "../../components/Dashboard"
+import Header from "../Header"
+import useAuthService from "../../services/AuthService"
+import { useSelector } from "react-redux"
 
-import { DUMMY_COURSES } from "../../components/CoursesList"
+import { useEffect } from "react"
+
 
 function AdminDashboard() {
+
+  const {getCourses, loading}=useAuthService()
+  const data=useSelector(state=>state.dashboard.courses)
+ 
+
+  useEffect(()=>{
+
+    const fetchCourses = async() =>{
+      await getCourses()
+    }
+    fetchCourses();
+  },[])
+
+ 
   return (
     <>
+      <Header />
       <div>AdminDashboard</div>
-      <Dashboard arr={DUMMY_COURSES} flag='admin' />
+      {data ? <Dashboard arr={data} flag='admin'/> :  loading}
+      
     </>
   )
 }

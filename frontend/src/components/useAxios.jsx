@@ -1,19 +1,19 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import {useState } from "react";
 
 const useAxios = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [token, setToken] = useState("");
 
+
   const axiosInstance = axios.create({
     baseURL: "http://localhost:8080",
     withCredentials: true,
   });
 
-
-  useEffect(() => {
-    const requestInterceptor = axiosInstance.interceptors.request.use(
+  
+  axiosInstance.interceptors.request.use(
       (config) => {
         if (token) {
           config.headers["Authorization"] = `Bearer ${token}`;
@@ -22,12 +22,12 @@ const useAxios = () => {
       },
       (error) => Promise.reject(error)
     );
-
-
-    const responseInterceptor = axiosInstance.interceptors.response.use(
+    
+    axiosInstance.interceptors.response.use(
       (response) => {
         const newToken = response.headers["authorization"];
         if (newToken) {
+          console.log("Setting new token after login")
           localStorage.setItem("accessToken", newToken);
           setToken(newToken);
         }
@@ -54,31 +54,18 @@ const useAxios = () => {
               originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
               return axiosInstance(originalRequest);
 
-            } else {
-              clearAuth();
-            }
+            } 
           } catch  {
-            clearAuth(); 
+            console.log("Please log in again.") 
           }
         }
 
         return Promise.reject(error);
       }
     );
-    
-    return () => {
-      axiosInstance.interceptors.request.eject(requestInterceptor);
-      axiosInstance.interceptors.response.eject(responseInterceptor);
-    };
-  }, [token]);
 
-  const clearAuth = () => {
-    localStorage.removeItem("accessToken");
-    setToken("");
-    // Additional logout logic, if needed
-  };
 
-  const fetchData = async ({ url, method, data = {}, params = {} }) => {
+  const fetchData = async ({ url, method, data = {}, params = {} ,headers={}}) => {
     setLoading(true);
     setError("");
 
@@ -88,6 +75,7 @@ const useAxios = () => {
         method,
         data,
         params,
+        headers
       });
       return result;
     } catch (error) {

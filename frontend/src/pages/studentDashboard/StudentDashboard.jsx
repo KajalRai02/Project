@@ -10,15 +10,14 @@ import {
 
 import {DUMMY_COURSES} from '../../components/CoursesList'
 import { Link} from "react-router-dom";
+import Header from "../Header";
 
 
 function StudentDashboard() {
 
-
-
   return (
     <>
-
+    <Header />
     <Divider variant="fullWidth" flexItem />
 
     <Grid2
@@ -27,7 +26,7 @@ function StudentDashboard() {
       columns={{ xs: 4, sm: 8, md: 9, lg: 12 }}
     >
       {DUMMY_COURSES.map((course) => (
-        <Grid2 key={course.title} size={{ xs: 4, sm: 4, md: 3, lg: 3 }}>
+        <Grid2 key={course.courseName} size={{ xs: 4, sm: 4, md: 3, lg: 3 }}>
           {/* course card  */}
           <Card variant="outlined" sx={{ height: 300, width: 300 }}>
             <CardMedia
@@ -35,7 +34,7 @@ function StudentDashboard() {
               src={`${course.image}`}
               sx={{ width: 300, height: 170 }}
             />
-            <CardContent component="div">{course.title}</CardContent>
+            <CardContent component="div">{course.courseName}</CardContent>
 
             <CardActionArea
               sx={{ display: "flex", justifyContent: "center" }}
