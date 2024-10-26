@@ -128,7 +128,7 @@ const useAuthService = () => {
             await fetchData({
                 url:`/api/courses/update/status/${CourseId}`,
                 method:'PUT',
-                body:JSON.stringify({ activeId }),
+                data:{ activeId },
                 headers: {
                     Authorization: accessToken,
                     'Content-Type': 'application/json',

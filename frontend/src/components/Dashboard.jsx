@@ -15,43 +15,52 @@ import RadioButtonCheckedIcon from "@mui/icons-material/RadioButtonChecked";
 import DeleteIcon from "@mui/icons-material/Delete";
 import DialogBox from "./DialogBox";
 import { useState } from "react";
- import useAuthService from "../services/AuthService";
+import useAuthService from "../services/AuthService";
+import EditForm from "./EditForm";
 
-
- function Dashboard({ arr, flag }) {
-
-  const  {updateCourseStatus} =useAuthService();
+function Dashboard({ arr, flag }) {
+  const { updateCourseStatus } = useAuthService();
 
   const [open, setOpen] = useState(false);
-  const [deleteId, setDeleteId]= useState(null)
+  const [deleteId, setDeleteId] = useState(null);
 
-  function handleDelete(id) {
-    setDeleteId(id)
-    setOpen((prev) => !prev);
-  }
-  function handleClose(){
-    setOpen(false)
-    setDeleteId(null)
-  }
-  function handleEdit() {
-    console.log("Editing");
-  }
-  const handleStatus=async(id,status)=>{
-    let activeId;
-    if(status==true){
-      activeId=0;
-    }else{
-      activeId=1;
-    }
-    try{
-      console.log(status);
-      await updateCourseStatus(id,status,activeId)
-    }catch{
-      console.log("error")
-    }
+  const [openEdit, setOpenEdit] = useState(false);
+  const [editId,setEditId]=useState(null)
+
+  function handleEditOpen(id) {
+    setEditId(id)
+    setOpenEdit(true);
     
   }
+  function handleEditClose() {
+    setOpenEdit(false);
+    console.log("hello")
+    setEditId(null)
+  }
 
+  function handleDelete(id) {
+    setDeleteId(id);
+    setOpen((prev) => !prev);
+  }
+  function handleClose() {
+    setOpen(false);
+    setDeleteId(null);
+  }
+
+  const handleStatus = async (id, status) => {
+    let activeId;
+    if (status == true) {
+      activeId = 0;
+    } else {
+      activeId = 1;
+    }
+    try {
+      console.log(status);
+      await updateCourseStatus(id, status, activeId);
+    } catch {
+      console.log("error");
+    }
+  };
 
   return (
     <>
@@ -76,12 +85,22 @@ import { useState } from "react";
                   {flag === "admin" ? item.courseName : item.userName}
                 </TableCell>
                 <TableCell>
-                  <IconButton onClick={handleEdit}>
+                  <IconButton onClick={()=>handleEditOpen(item.id)}>
                     <EditIcon />
+                    {openEdit && item.id === editId &&(
+                      <EditForm
+                        open={openEdit}
+                        close={handleEditClose}
+                        id={item.id}
+                        name={item.courseName}
+                      />
+                    )}
                   </IconButton>
                 </TableCell>
                 <TableCell>
-                  <IconButton onClick={()=>handleStatus(item.id, item.active)}>
+                  <IconButton
+                    onClick={() => handleStatus(item.id, item.active)}
+                  >
                     {item.active ? (
                       <RadioButtonCheckedIcon color="success" />
                     ) : (
@@ -90,14 +109,14 @@ import { useState } from "react";
                   </IconButton>
                 </TableCell>
                 <TableCell>
-                  <IconButton onClick={()=> handleDelete(item.id)}>
+                  <IconButton onClick={() => handleDelete(item.id)}>
                     <DeleteIcon />
                     {open && deleteId === item.id && (
-                      <DialogBox 
-                      id={item.id} 
-                      open={open} 
-                      text="Do you want to delete?"
-                      onClose= {handleClose}
+                      <DialogBox
+                        id={item.id}
+                        open={open}
+                        text="Do you want to delete?"
+                        onClose={handleClose}
                       />
                     )}
                   </IconButton>
@@ -111,4 +130,4 @@ import { useState } from "react";
   );
 }
 
-export default Dashboard
+export default Dashboard;

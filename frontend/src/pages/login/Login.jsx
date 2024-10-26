@@ -66,13 +66,3 @@ function LoginPage() {
 export default LoginPage;
 
 
-
-  // const response = (await fetchData({
-    //   url: "/api/auth/login",
-    //   method: "POST",
-    //   data: {
-    //     userName: data.Username,
-    //     password: data.Password,
-    //   },
-    // })).data;
-    // console.log(response)
