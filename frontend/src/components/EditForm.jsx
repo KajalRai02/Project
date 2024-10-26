@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import BasicButton from "./Forms/BasicButton";
 import BasicModal from "./Forms/BasicModal";
 import { Box, FormControl, Typography } from "@mui/material";
-import { useState } from "react";
+
 
 
 function EditForm({ open,close ,id, name }) {
@@ -63,7 +63,7 @@ function EditForm({ open,close ,id, name }) {
                 <TextBox id="lessons"  defaultValue="lessons" {...register("Lessons")}/>
               </Box>
             </FormControl>
-            
+
             <FormControl>
               <Box display="flex" alignItems="center">
                 <Typography variant="body1" sx={{ marginRight: 1 }}>
