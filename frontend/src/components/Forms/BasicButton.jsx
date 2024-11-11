@@ -1,14 +1,18 @@
 
 import Button from '@mui/material/Button';
 
-function BasicButton({type,children}) {
+function BasicButton({variant="contained",startIcon=null, type,sx={margin:7} ,children, ...rest}) {
   return (
     <span>
       <Button
-       variant="contained"
+       variant={variant}
        type={type}
-       sx={{margin:7}}
-      >{children}</Button>
+       sx={{...sx}}
+       startIcon={startIcon}
+       {...rest}
+      >
+        {children}
+      </Button>
     </span>
     
   )

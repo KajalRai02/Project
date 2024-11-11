@@ -3,6 +3,7 @@ import Dashboard from '../../components/Dashboard';
 import useAuthService from '../../services/AuthService';
 import Header from "../Header"
 import { useSelector } from 'react-redux';
+import { DUMMY_COURSE } from '../courseDashboard/CourseList';
 
 function SuperAdminDashboard() {
 
@@ -13,6 +14,7 @@ function SuperAdminDashboard() {
   useEffect(()=>{
 
     const fetchUsers = async() =>{
+      
       await getUsers()
       
     }

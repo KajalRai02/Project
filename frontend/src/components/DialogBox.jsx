@@ -4,22 +4,22 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
-  DialogTitle,
 } from "@mui/material";
 
-import {useDispatch} from 'react-redux'
-import { deleteCourses } from "../store/dashboardSlice";
+
 import useAuthService from "../services/AuthService";
 
- function DialogBox({ open, text,id }) {
+ function DialogBox({ open, text,id ,flag}) {
 
-  const dispatch=useDispatch()
-  const {deleteCourseById} = useAuthService()
+ 
+  const {deleteCourseById, deleteUserById} = useAuthService()
 
   const handleDelete= async(id)=> {
-    await deleteCourseById(id)
-    // dispatch(deleteCourses(id));
-    console.log("deleting")
+    if(flag === 'admin'){
+      await deleteCourseById(id)
+    }else{
+      await deleteUserById(id)
+    }    
   }
 
   return (

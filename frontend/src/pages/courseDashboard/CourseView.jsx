@@ -4,12 +4,18 @@ import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ShareIcon from '@mui/icons-material/Share';
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-
-import { useState } from "react";
+import {Button} from "@mui/material"
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { useState, useEffect } from "react";
 
 import Header from "../Header";
 
 import {DUMMY_COURSE} from "./CourseList";
+import useAuthService from "../../services/AuthService";
+import { useSelector } from "react-redux";
+import BasicButton from "../../components/Forms/BasicButton";
+import { useParams } from "react-router-dom";
 
 const theme = createTheme({
   components: {
@@ -27,20 +33,35 @@ const theme = createTheme({
 function CourseView() {
 
     const [activeButton, setActiveButton]= useState(null)
+   
+    const {courseId }=useParams();
+    console.log(courseId)
+
+    const courses = useSelector(state=>state.dashboard.courses)
+    const userRole=useSelector(state=>state.auth.user.role)
+
+    const course = courses.find(course => course.id === parseInt(courseId)); 
+    console.log(course)
 
     function handleButtonClick(ButtonType){
         setActiveButton(ButtonType)
+    }
+    function handleEditLesson(lessonId){
+        console.log("Editing : ", lessonId)
+    }
+    function handleDeleteLesson(lessonId){
+        console.log("Deleting lesson with id:", lessonId)
     }
 
 
   return (
     <>
         <Header />
+        
         <Grid2 container columns={12} columnSpacing={2} >
             <Grid2 size={{xs:12, sm:6}}>
                 <Box p={2} >
                     <Card  >
-                        
                             <CardMedia
                             component="img"
                             height="auto"
@@ -50,7 +71,7 @@ function CourseView() {
                             />
                             <CardContent>
                                 <Typography gutterBottom variant="h5" component="div">
-                                    {DUMMY_COURSE.courseTitle}
+                                    {course.courseName}
                                 </Typography>
                                 <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                                     {DUMMY_COURSE.Description}
@@ -90,17 +111,40 @@ function CourseView() {
                             aria-controls="panel1-content"
                             id="panel1-header"
                         >
-                            {DUMMY_COURSE.courseTitle}
+                            {course.courseName}
                         </AccordionSummary>
-                        {DUMMY_COURSE.lessons.map((lesson)=>(
-                            <AccordionDetails key={lesson.lessonId} sx={{ 
+                        {course.lessons.map((lesson)=>(
+                            <AccordionDetails key={lesson.id} sx={{ 
                                 border: '1px solid #ccc', 
                                 borderRadius: '4px',      
                                 padding: '16px',          
                                 marginBottom: '8px',     
                                 backgroundColor: '#f9f9f9' }}
                             >
-                            {lesson.lessonTitle}
+                            {lesson.lessonName}
+
+                            {userRole === "ADMIN" && (
+                            <>
+                            <BasicButton
+                                variant="outlined"
+                                startIcon={<EditIcon />}
+                                sx={{ margin: 1 }}
+                                onClick={() => handleEditLesson(lesson.id)}
+                            >
+                               
+                            </BasicButton>
+                            <BasicButton
+                                variant="outlined"
+                                color="error"
+                                startIcon={<DeleteIcon />}
+                                onClick={() => handleDeleteLesson(lesson.id)}
+                            >
+                               
+                            </BasicButton>
+                            </>
+                        )}
+
+                            
                         </AccordionDetails>
                         ))}
                         
@@ -109,6 +153,7 @@ function CourseView() {
                 </Box>
             </Grid2>
         </Grid2>
+ 
       
         
     </>

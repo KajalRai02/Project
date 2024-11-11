@@ -7,6 +7,7 @@ import CourseView from "./pages/courseDashboard/CourseView";
 import SuperAdminDashboard from "./pages/dashboards/SuperAdminDashboard";
 import AdminDashboard from "./pages/dashboards/AdminDashboard";
 import StudentDashboard from "./pages/studentDashboard/StudentDashboard";
+//import EditForm from "./components/EditForm";
 
 function App() {
   const router = createBrowserRouter([
@@ -23,6 +24,7 @@ function App() {
     },
 
     { path: "/courseView/:courseId", element: <CourseView /> },
+    // {path:"/edit", element:<EditForm/>}
   ]);
 
   return <RouterProvider router={router} />;

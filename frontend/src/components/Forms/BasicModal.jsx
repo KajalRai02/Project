@@ -18,7 +18,7 @@ function BasicModal({ open, close, children }) {
   return (
     <Modal
       open={open}
-      onClose={close}
+      //onClose={close}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
       slots={{ backdrop: Backdrop }}

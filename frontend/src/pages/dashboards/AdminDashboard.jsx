@@ -27,6 +27,8 @@ function AdminDashboard() {
       <div>AdminDashboard</div>
       {data ? <Dashboard arr={data} flag='admin'/> :  loading}
       
+         {/* <AddButton /> */}
+     
     </>
   )
 }
