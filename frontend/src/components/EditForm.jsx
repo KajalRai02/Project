@@ -1,18 +1,18 @@
-import TextBox from "./Forms/TextBox";
+
 import { useForm, Controller } from "react-hook-form";
 import BasicButton from "./Forms/BasicButton";
 import BasicModal from "./Forms/BasicModal";
 import { Box, FormControl, TextField, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import EditIcon from "@mui/icons-material/Edit";
-import useAuthService from "../services/AuthService";
-import { useState, useEffect } from "react";
+import {  useEffect } from "react";
 
-function EditForm({ open, close, id, name }) {
+function EditForm({ open, close, id, name , type,apiCalls, courseId}) {
   //const [name,setName]=useState(initialName)
 
   const navigate = useNavigate();
-  const { updateCourse } = useAuthService();
+  console.log(courseId, "courseId in editform")
+ 
 
   const { handleSubmit, control, setValue,watch } = useForm({
     defaultValues:{
@@ -36,7 +36,7 @@ function EditForm({ open, close, id, name }) {
     try {
       console.log("Submitting change data");
       console.log(data.name);
-      await updateCourse(id, data.name);
+      await apiCalls({id, name: data.name, courseId});
       close();
     } catch {
       console.log("error updating data");
@@ -78,7 +78,7 @@ function EditForm({ open, close, id, name }) {
               </Box>
             </FormControl>
 
-            <FormControl>
+            {type === "course" && <FormControl>
               <Box display="flex" alignItems="center">
                 <Typography variant="body1" sx={{ marginRight: 1 }}>
                   Lessons:
@@ -93,7 +93,7 @@ function EditForm({ open, close, id, name }) {
                   Edit lessons
                 </BasicButton>
               </Box>
-            </FormControl>
+            </FormControl>}
 
             <Box display="flex" alignItems="center">
               <BasicButton type="submit">Save</BasicButton>
@@ -109,6 +109,12 @@ function EditForm({ open, close, id, name }) {
 }
 
 export default EditForm;
+
+
+
+
+
+
 
 {
   /* <FormControl>

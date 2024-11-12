@@ -18,7 +18,7 @@ import useAuthService from "../services/AuthService";
 import EditForm from "./EditForm";
 
 function Dashboard({ arr, flag }) {
-  const { updateCourseStatus, updateUserStatus } = useAuthService();
+  const { updateCourseStatus, updateUserStatus, updateCourse } = useAuthService();
 
   const [deleteId, setDeleteId] = useState(null);
   const [open, setOpen] = useState(false);
@@ -111,6 +111,9 @@ function Dashboard({ arr, flag }) {
           close={handleEditClose}
           id={editId}
           name={arr.find((item) => item.id === editId)?.courseName || ""}
+          type="course"
+          apiCalls={updateCourse}
+          courseId={editId}
         />
       )}
     </>

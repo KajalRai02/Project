@@ -9,6 +9,10 @@ import {
   getCourseStatus,
   getUserStatus,
   editCourseName,
+  editLessonName,
+  deleteLesson,
+  createCourses,
+  createLessons
 } from "../store/dashboardSlice";
 
 const useAuthService = () => {
@@ -66,6 +70,45 @@ const useAuthService = () => {
 
     //remove local storage
     localStorage.removeItem("accessToken");
+  };
+
+  const createCourse = async (data) => {
+    try {
+      const response = await fetchData({
+        url: "/api/courses",
+        method: "POST",
+        data: {
+          courseName: data.courseName,
+        },
+        headers: { Authorization: accessToken },
+      });
+      dispatch(createCourses(response.data))
+      return response;
+    } catch (error) {
+      console.log("Problem while creating course .", error);
+      return;
+    }
+  };
+
+  const createLesson= async (data) => {
+    try {
+      const {name, courseId}=data
+      console.log(name,courseId)
+      const response = await fetchData({
+        url: "/api/lessons",
+        method: "POST",
+        data: {
+          lessonName: name,
+          courseId
+        },
+        headers: { Authorization: accessToken },
+      });
+      dispatch(createLessons(response.data))
+      return response;
+    } catch (error) {
+      console.log("Problem while creating lesson .", error);
+      return;
+    }
   };
 
   const getCourses = async () => {
@@ -136,6 +179,19 @@ const useAuthService = () => {
       console.log("Error deleting courses by Id");
     }
   };
+  const deleteLessonById = async (lessonId,courseId) => {
+    try {
+      await fetchData({
+        url: `/api/lessons/${lessonId}`,
+        method: "DELETE",
+        headers: { Authorization: accessToken },
+      });
+
+      dispatch(deleteLesson({lessonId,courseId}));
+    } catch {
+      console.log("Error deleting courses by Id");
+    }
+  };
 
   const deleteUserById = async (userId) => {
     try {
@@ -193,8 +249,9 @@ const useAuthService = () => {
     }
   };
 
-  const updateCourse = async (courseId, courseName) => {
+  const updateCourse = async (data) => {
     try {
+      const { id: courseId, name: courseName } = data
       console.log("Course id , whose name i want to update", courseId);
       await fetchData({
         url: `/api/courses/${courseId}`,
@@ -207,6 +264,26 @@ const useAuthService = () => {
       });
 
       dispatch(editCourseName({courseId, courseName}))
+    } catch {
+      console.log("Error updating course Name");
+    }
+  };
+
+  const updateLesson = async (data) => {
+    try {
+      const {id: lessonId, name: lessonName, courseId} = data;
+      console.log("Lesson id , whose name i want to update", lessonId);
+      await fetchData({
+        url: `/api/lessons/${lessonId}`,
+        method: "PUT",
+        data: { lessonName },
+        headers: {
+          Authorization: accessToken,
+          "Content-Type": "application/json",
+        },
+      });
+
+      dispatch(editLessonName({courseId,lessonId, lessonName}))
     } catch {
       console.log("Error updating course Name");
     }
@@ -226,6 +303,10 @@ const useAuthService = () => {
     deleteUserById,
     getLessons,
     updateCourse,
+    updateLesson,
+    deleteLessonById,
+    createCourse,
+    createLesson
   };
 };
 

@@ -9,7 +9,7 @@ import {
 
 import useAuthService from "../services/AuthService";
 
- function DialogBox({ open, text,id ,flag}) {
+ function DialogBox({ open, text,id ,flag, onClose}) {
 
  
   const {deleteCourseById, deleteUserById} = useAuthService()
@@ -24,7 +24,7 @@ import useAuthService from "../services/AuthService";
 
   return (
     <>
-      <Dialog open={open}>
+      <Dialog open={open} close={onClose}>
         <DialogContent>
           <DialogContentText>{text}</DialogContentText>
         </DialogContent>
