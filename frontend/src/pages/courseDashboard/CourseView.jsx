@@ -62,22 +62,19 @@ function CourseView() {
   function handleClose() {
     setShowForm(false);
   }
-  
+
   function handleButtonClick(ButtonType) {
     setActiveButton(ButtonType);
   }
   function handleEditLesson(lesson) {
     setEditLesson(lesson); // Set the lesson to be edited
     setOpenEditModal(true); // Open the edit modal
-    
   }
-  const handleDeleteLesson= async(lessonId) =>{
-    
-    await deleteLessonById(lessonId,courseId)
+  const handleDeleteLesson = async (lessonId) => {
+    await deleteLessonById(lessonId, courseId);
 
     console.log("Deleted lesson with id:", lessonId);
-
-  }
+  };
 
   return (
     <>
@@ -194,7 +191,7 @@ function CourseView() {
 
       <CreateButton onClick={() => setShowForm(true)} />
 
-      {showForm && (
+      {showForm && userRole === "ADMIN" && (
         <CreateForm
           name="lessonName"
           label="Lesson Name"

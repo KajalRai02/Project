@@ -12,7 +12,8 @@ import {
   editLessonName,
   deleteLesson,
   createCourses,
-  createLessons
+  createLessons,
+  // createUserAdmin
 } from "../store/dashboardSlice";
 
 const useAuthService = () => {
@@ -72,13 +73,35 @@ const useAuthService = () => {
     localStorage.removeItem("accessToken");
   };
 
+  const createAdmin = async (data) => {
+    try {
+      const response = await fetchData({
+        url: "/superAdmins/register/admin",
+        method: "POST",
+        data: {
+          userName: data.Username,
+          password: data.Password,
+          email: data.Email,
+        },
+        headers: { Authorization: accessToken },
+      });
+      //No need for dispatch here because the data is fetched on navigating
+      //dispatch(createUserAdmin(response.data))
+      return response;
+    } catch (error) {
+      console.log("Problem while creating course .", error);
+      return;
+    }
+  };
+
   const createCourse = async (data) => {
     try {
+      console.log("This is inside create course api call",data)
       const response = await fetchData({
         url: "/api/courses",
         method: "POST",
         data: {
-          courseName: data.courseName,
+          courseName: data.name,
         },
         headers: { Authorization: accessToken },
       });
@@ -128,6 +151,43 @@ const useAuthService = () => {
       console.log("Error while retrieving courses");
     }
   };
+
+  const getAdminCourses = async (adminId) => {
+    try {
+      const response = (
+        await fetchData({
+          url: `/api/courses/admin/${adminId}`,
+          method: "GET",
+          headers: { Authorization: accessToken },
+        })
+      ).data;
+
+      dispatch(getAllCourses(response));
+
+      return response;
+    } catch {
+      console.log("Error while retrieving courses");
+    }
+  };
+
+  const getAllocatedCourses = async (studentId) => {
+    try {
+      const response = (
+        await fetchData({
+          url: `api/student/${studentId}`,
+          method: "GET",
+          headers: { Authorization: accessToken },
+        })
+      ).data;
+
+      console.log(response)
+
+      return response;
+    } catch {
+      console.log("Error while retrieving courses");
+    }
+  };
+
 
   const getLessons = async () => {
     try {
@@ -195,13 +255,16 @@ const useAuthService = () => {
 
   const deleteUserById = async (userId) => {
     try {
+      console.log(userId)
       await fetchData({
         url: `/superAdmins/users/${userId}`,
         method: "DELETE",
         headers: { Authorization: accessToken },
       });
 
-      dispatch(deleteUsers(userId));
+      
+
+      //dispatch(deleteUsers(userId));
     } catch {
       console.log("Error deleting users by Id");
     }
@@ -306,7 +369,10 @@ const useAuthService = () => {
     updateLesson,
     deleteLessonById,
     createCourse,
-    createLesson
+    createLesson,
+    createAdmin,
+    getAllocatedCourses,
+    getAdminCourses
   };
 };
 

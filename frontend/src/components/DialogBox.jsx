@@ -17,20 +17,23 @@ import useAuthService from "../services/AuthService";
   const handleDelete= async(id)=> {
     if(flag === 'admin'){
       await deleteCourseById(id)
+      console.log("Yes deleted")
     }else{
+      console.log("The user i wnat to delete = ", id)
       await deleteUserById(id)
     }    
   }
+  console.log("Is it rendering after state updated", open)
 
   return (
     <>
-      <Dialog open={open} close={onClose}>
+      <Dialog open={open} onClose={onClose}>
         <DialogContent>
           <DialogContentText>{text}</DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={()=> handleDelete(id)}>Yes</Button>
-          <Button>No</Button>
+          <Button onClick={()=>onClose()}>No</Button>
         </DialogActions>
       </Dialog>
     </>

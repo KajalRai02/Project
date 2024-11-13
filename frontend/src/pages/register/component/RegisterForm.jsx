@@ -1,14 +1,30 @@
 /* eslint-disable react/prop-types */
 
-import { Box, TextField, Button, FormControl, FormHelperText, Typography, Paper } from "@mui/material";
+import {
+  Box,
+  TextField,
+  Button,
+  FormControl,
+  FormHelperText,
+  Typography,
+  Paper,
+} from "@mui/material";
 
-import { Link as RouterLink } from "react-router-dom";
-
-
-const RegisterForm = ({ onSubmit, register, errors, isSubmitting }) => {
+const RegisterForm = ({ onSubmit, register, errors, isSubmitting, title }) => {
   return (
-    <Paper elevation={24} sx={{ padding: 4, width: '80%', mt: "100px", maxWidth: 400, backgroundColor: "#8697C4" }}>
-      <Typography variant="h4" align="center" sx={{ marginBottom: 2 }}>Register</Typography>
+    <Paper
+      elevation={24}
+      sx={{
+        padding: 4,
+        width: "80%",
+        mt: "100px",
+        maxWidth: 400,
+        backgroundColor: "#8697C4",
+      }}
+    >
+      <Typography variant="h4" align="center" sx={{ marginBottom: 2 }}>
+        {title}
+      </Typography>
 
       <Box
         component="form"
@@ -42,8 +58,8 @@ const RegisterForm = ({ onSubmit, register, errors, isSubmitting }) => {
               required: "Email is required",
               pattern: {
                 value: /^\S+@\S+$/i,
-                message: "Email is not valid"
-              }
+                message: "Email is not valid",
+              },
             })}
           />
           <FormHelperText>{errors.Email?.message}</FormHelperText>
@@ -56,14 +72,20 @@ const RegisterForm = ({ onSubmit, register, errors, isSubmitting }) => {
             label="Password"
             {...register("Password", {
               required: "Password is required",
-              minLength: { value: 8, message: "Password must be at least 8 characters" },
-              maxLength: { value: 20, message: "Password cannot exceed 20 characters" },
+              minLength: {
+                value: 8,
+                message: "Password must be at least 8 characters",
+              },
+              maxLength: {
+                value: 20,
+                message: "Password cannot exceed 20 characters",
+              },
             })}
           />
           <FormHelperText>{errors.Password?.message}</FormHelperText>
         </FormControl>
 
-        <Button  variant="contained" type="submit" disabled={isSubmitting}>
+        <Button variant="contained" type="submit" disabled={isSubmitting}>
           Sign up
         </Button>
       </Box>

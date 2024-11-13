@@ -6,16 +6,20 @@ import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import CreateForm from "../../components/CreateForm";
 import CreateButton from "../../components/Forms/CreateButton";
+import { useParams } from "react-router-dom";
 
 function AdminDashboard() {
-  const { getCourses, loading, createCourse } = useAuthService();
+  const { getAdminCourses, loading, createCourse } = useAuthService();
   const data = useSelector((state) => state.dashboard.courses);
 
+  const {adminId}=useParams();
   const [showForm, setShowForm] = useState(false);
 
   useEffect(() => {
     const fetchCourses = async () => {
-      await getCourses();
+      //await getCourses();
+      console.log("This is the admin id , u are currently logged into ",adminId)
+      await getAdminCourses(adminId);
     };
     fetchCourses();
   }, []);

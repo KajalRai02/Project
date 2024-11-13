@@ -10,6 +10,12 @@ const dashboardSlice = createSlice({
   name: "dashboard",
   initialState,
   reducers: {
+
+    // createUserAdmin:(state,action)=>{
+    //   console.log(action.payload)
+      
+
+    // },
     createCourses:(state,action)=>{
       console.log(action.payload)
       const newCourse=action.payload
@@ -120,6 +126,7 @@ export const {
   editLessonName,
   deleteLesson,
   createCourses,
-  createLessons
+  createLessons,
+  // createUserAdmin
 } = dashboardSlice.actions;
 export default dashboardSlice.reducer;
