@@ -16,6 +16,7 @@ const useAxios = () => {
   axiosInstance.interceptors.request.use(
       (config) => {
         if (token) {
+          console.log("Inside request interceptors")
           config.headers["Authorization"] = `Bearer ${token}`;
         }
         return config;
@@ -27,22 +28,24 @@ const useAxios = () => {
       (response) => {
         const newToken = response.headers["authorization"];
         if (newToken) {
-          console.log("Setting new token after login")
           localStorage.setItem("accessToken", newToken);
           setToken(newToken);
         }
         return response;
       },
       async (error) => {
+        console.log("Error printed inside response interceptors =",error)
         const originalRequest = error.config;
         if (
-          error.response?.status === 403 &&
+          error.response.data?.statusCode === 403 &&
           error.response.data?.message === "Invalid Access Token"
         ) {
           try {
+            console.log("Trying to retrieve new access token")
             const refreshResponse = await fetchData({
               url: "/api/auth/refresh-Token",
               method: "POST",
+              withCredentials:true
             });
 
             const newAccessToken = refreshResponse.headers["authorization"];
@@ -50,7 +53,6 @@ const useAxios = () => {
               localStorage.setItem("accessToken", newAccessToken);
               setToken(newAccessToken);
 
-              // Retry the original request with the new token
               originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
               return axiosInstance(originalRequest);
 

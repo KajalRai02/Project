@@ -8,8 +8,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import {  useEffect } from "react";
 
 function EditForm({ open, close, id, name , type,apiCalls, courseId}) {
-  //const [name,setName]=useState(initialName)
-
+  
   const navigate = useNavigate();
   console.log(courseId, "courseId in editform")
  
@@ -28,14 +27,12 @@ function EditForm({ open, close, id, name , type,apiCalls, courseId}) {
 
   function handleEditLessons() {
     console.log("Id that is to be edited", id);
-    console.log("navigating");
     navigate(`/courseView/${id}`);
   }
 
   const onSubmit = async (data) => {
     try {
-      console.log("Submitting change data");
-      console.log(data.name);
+      
       await apiCalls({id, name: data.name, courseId});
       close();
     } catch {

@@ -5,7 +5,7 @@ import {
   getAllLessons,
   getAllUsers,
   deleteCourses,
-  deleteUsers,
+  // deleteUsers,
   getCourseStatus,
   getUserStatus,
   editCourseName,
@@ -60,8 +60,6 @@ const useAuthService = () => {
   };
 
   const logoutAuth = async () => {
-    console.log(accessToken);
-
     //remove data from token table and remove refresh token from backend
     await fetchData({
       url: "/api/auth/logout",
@@ -180,6 +178,8 @@ const useAuthService = () => {
         })
       ).data;
 
+      dispatch(getAllCourses(response));
+
       console.log(response)
 
       return response;
@@ -261,8 +261,6 @@ const useAuthService = () => {
         method: "DELETE",
         headers: { Authorization: accessToken },
       });
-
-      
 
       //dispatch(deleteUsers(userId));
     } catch {

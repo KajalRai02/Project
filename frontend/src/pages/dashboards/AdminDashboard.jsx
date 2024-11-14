@@ -18,7 +18,7 @@ function AdminDashboard() {
   useEffect(() => {
     const fetchCourses = async () => {
       //await getCourses();
-      console.log("This is the admin id , u are currently logged into ",adminId)
+      
       await getAdminCourses(adminId);
     };
     fetchCourses();

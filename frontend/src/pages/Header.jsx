@@ -4,6 +4,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { Link } from "react-router-dom";
 import {useDispatch, useSelector} from 'react-redux'
 import { logout } from "../store/userSlice";
+import { resetDashboard } from "../store/dashboardSlice";
 import useAuthService from "../services/AuthService";
 import { useNavigate } from "react-router-dom";
 
@@ -17,10 +18,9 @@ const Header = () => {
 
   const handleLogout=async()=>{
     await logoutAuth()
-
     //redux store set to null
     dispatch(logout())
-
+    dispatch(resetDashboard())
     navigate('/')
     
   }

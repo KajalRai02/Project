@@ -11,6 +11,12 @@ const dashboardSlice = createSlice({
   initialState,
   reducers: {
 
+    resetDashboard:(state)=>{
+      state.isAuthenticated=false,
+      state.courses=[],
+      state.users=[]
+    },
+
     // createUserAdmin:(state,action)=>{
     //   console.log(action.payload)
       
@@ -127,6 +133,7 @@ export const {
   deleteLesson,
   createCourses,
   createLessons,
+  resetDashboard,
   // createUserAdmin
 } = dashboardSlice.actions;
 export default dashboardSlice.reducer;
