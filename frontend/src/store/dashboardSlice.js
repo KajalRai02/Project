@@ -10,36 +10,31 @@ const dashboardSlice = createSlice({
   name: "dashboard",
   initialState,
   reducers: {
-
-    resetDashboard:(state)=>{
-      state.isAuthenticated=false,
-      state.courses=[],
-      state.users=[]
+    resetDashboard: (state) => {
+      (state.isAuthenticated = false), (state.courses = []), (state.users = []);
     },
 
     // createUserAdmin:(state,action)=>{
     //   console.log(action.payload)
-      
 
     // },
-    createCourses:(state,action)=>{
-      console.log(action.payload)
-      const newCourse=action.payload
-      state.courses.push(newCourse)
-
+    createCourses: (state, action) => {
+      console.log(action.payload);
+      const newCourse = action.payload;
+      state.courses.push(newCourse);
     },
     createLessons: (state, action) => {
       const newLesson = action.payload;
       const courseId = newLesson.courseId;
-    
-      const course = state.courses.find(course => course.id === courseId);
-    
+
+      const course = state.courses.find((course) => course.id === courseId);
+
       if (course) {
         course.lessons.push(newLesson);
       } else {
         console.error(`Course with id ${courseId} not found`);
       }
-    },      
+    },
     getAllCourses: (state, action) => {
       state.courses = action.payload;
     },
@@ -50,14 +45,9 @@ const dashboardSlice = createSlice({
       state.users = action.payload;
     },
     editCourseName: (state, action) => {
-      console.log(action.payload, "poiuytrew");
-      console.log(state.courses, "courses");
-
       const course = state.courses.find(
         (course) => course.id === action.payload.courseId
       );
-
-      console.log(course, "ye course h");
 
       if (course) {
         course.courseName = action.payload.courseName;
@@ -83,17 +73,14 @@ const dashboardSlice = createSlice({
       state.courses = state.courses.filter((course) => course.id !== courseId);
     },
     deleteLesson: (state, action) => {
+      const { courseId, lessonId } = action.payload;
+      const course = state.courses.find((course) => course.id == courseId);
 
-        const { courseId, lessonId } = action.payload;
-        const course = state.courses.find(course => course.id == courseId);
-        console.log(course)
-        
-        if (course) {
-            
-            course.lessons = course.lessons.filter(lesson => lesson.id !== lessonId);
-            console.log(course.lesson)
-        }
-       
+      if (course) {
+        course.lessons = course.lessons.filter(
+          (lesson) => lesson.id !== lessonId
+        );
+      }
     },
     deleteUsers: (state, action) => {
       const userId = action.payload;
@@ -102,7 +89,7 @@ const dashboardSlice = createSlice({
     getCourseStatus: (state, action) => {
       const courseStatus = action.payload.active;
       const courseId = action.payload.CourseId;
-      console.log("CourseStatus ; ", courseStatus, courseId);
+
       state.courses = state.courses.map((course) =>
         course.id === courseId ? { ...course, active: courseStatus } : course
       );
@@ -111,7 +98,7 @@ const dashboardSlice = createSlice({
     getUserStatus: (state, action) => {
       const userStatus = action.payload.active;
       const userId = action.payload.userId;
-      console.log("UserStatus ; ", userStatus, userId);
+
       state.users = state.users.map((user) =>
         user.id === userId ? { ...user, active: userStatus } : user
       );

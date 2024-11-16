@@ -1,29 +1,29 @@
-
 import { AppBar, Toolbar, IconButton, Typography, Button } from "@mui/material";
-import MenuIcon from '@mui/icons-material/Menu';
+import MenuIcon from "@mui/icons-material/Menu";
 import { Link } from "react-router-dom";
-import {useDispatch, useSelector} from 'react-redux'
+import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../store/userSlice";
 import { resetDashboard } from "../store/dashboardSlice";
 import useAuthService from "../services/AuthService";
 import { useNavigate } from "react-router-dom";
 
-const Header = () => {
+const Header = ({studentId }) => {
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { logoutAuth } = useAuthService();
 
-  
-  const isAuthenticated = useSelector(state => state.auth.isAuthenticated)
-  const dispatch= useDispatch()
-  const navigate=useNavigate()
-  const {logoutAuth}=useAuthService()
-
-  const handleLogout=async()=>{
-    await logoutAuth()
-    //redux store set to null
-    dispatch(logout())
-    dispatch(resetDashboard())
-    navigate('/')
-    
+  function handleCourses(){
+    navigate(`/dashboard/STUDENT/${studentId}/view/courses`)
   }
+
+  const handleLogout = async () => {
+    await logoutAuth();
+    //redux store set to null
+    dispatch(logout());
+    dispatch(resetDashboard());
+    navigate("/");
+  };
 
   return (
     <AppBar position="static" sx={{ backgroundColor: "#3D52A0" }}>
@@ -40,15 +40,26 @@ const Header = () => {
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           Contact us
         </Typography>
-        
+
         {!isAuthenticated ? (
           <>
-            <Button component={Link} to="/login" color="inherit" sx={{ mx: 1 }}>Sign in</Button>
-            <Button component={Link} to="/register" color="inherit">Sign up</Button>
+            <Button component={Link} to="/login" color="inherit" sx={{ mx: 1 }}>
+              Sign in
+            </Button>
+            <Button component={Link} to="/register" color="inherit">
+              Sign up
+            </Button>
           </>
-        ):
-          <Button onClick={handleLogout} color="inherit">Logout</Button>
-        }
+        ) : (
+          <>
+            <Button onClick={handleCourses} color="inherit">
+              Courses
+            </Button>
+            <Button onClick={handleLogout} color="inherit">
+              Logout
+            </Button>
+          </>
+        )}
       </Toolbar>
     </AppBar>
   );

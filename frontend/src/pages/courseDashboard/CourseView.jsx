@@ -205,9 +205,9 @@ function CourseView() {
       {editLesson && (
         <EditForm
           open={openEditModal}
-          close={() => setOpenEditModal(false)} // Close the modal
+          close={() => setOpenEditModal(false)}
           id={editLesson.id}
-          name={editLesson.lessonName} // Pass the lesson name for editing
+          name={editLesson.lessonName} 
           type="lesson"
           apiCalls={updateLesson}
           courseId={courseId}

@@ -10,8 +10,15 @@ import StudentDashboard from "./pages/studentDashboard/StudentDashboard";
 import RequiredAuth from "./components/RequiredAuth";
 import Unauthorized from "./components/Unauthorized";
 import NotFoundPage from "./components/Forms/NotFoundPage";
+import CircularSpinner from "./components/Forms/CircularSpinner";
+import { useSelector } from "react-redux";
+import CoursesDashboard from "./pages/studentDashboard/CoursesDashboard";
 
 function App() {
+
+  //const loading = useSelector((state) => state.loading.loading);
+  
+
   const router = createBrowserRouter([
     { path: "/", element: <HomePage /> },
     { path: "/login", element: <LoginPage /> },
@@ -33,7 +40,11 @@ function App() {
     {
       path: "/dashboard",
       element: <RequiredAuth allowedRoles={["STUDENT"]} />,
-      children: [{ path: "STUDENT/:studentId", element: <StudentDashboard /> }],
+      children: [
+        { path: "STUDENT/:studentId", element: <StudentDashboard /> },
+        { path: "STUDENT/:studentId/view/courses", element: <CoursesDashboard /> }
+
+      ],
     },
 
     {
@@ -47,7 +58,13 @@ function App() {
     
   ]);
 
-  return <RouterProvider router={router} />;
+  return (
+    <>
+       {/* {loading && <CircularSpinner />} */}
+       {/* {!loading && <RouterProvider router={router} />} */}
+       <RouterProvider router={router} />
+    </>
+  )
 }
 
 export default App;

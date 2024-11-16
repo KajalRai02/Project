@@ -1,24 +1,20 @@
-import {
-  Divider,
-} from "@mui/material";
-
-
-import { useParams } from "react-router-dom";
-import Header from "../Header";
 import { useEffect, useState } from "react";
 import useAuthService from "../../services/AuthService";
+import Header from "../Header";
+import { Divider } from "@mui/material";
 import Dashboard from "./shared/Dashboard";
 
-function StudentDashboard() {
-  const { getAllocatedCourses } = useAuthService();
 
-  const {studentId} = useParams();
+function CoursesDashboard() {
+  const { getCourses, updateStudent } = useAuthService();
 
   const [courses, setCourses] = useState([]);
 
+  //const {studentId} = useParams();
+
   useEffect(() => {
     const fetchUsers = async () => {
-      const allotedCourses = await getAllocatedCourses(studentId);
+      const allotedCourses = await getCourses();
 
       const filteredCourses = allotedCourses.map((course) => ({
         courseName: course.courseName,
@@ -32,11 +28,11 @@ function StudentDashboard() {
 
   return (
     <>
-      <Header studentId={studentId}/>
+      <Header />
       <Divider variant="fullWidth" flexItem />
-      <Dashboard items={courses} type="student" />
+      <Dashboard items={courses} type="course" apicalls={updateStudent}/>
     </>
   );
 }
 
-export default StudentDashboard;
+export default CoursesDashboard;

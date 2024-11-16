@@ -94,7 +94,7 @@ const useAuthService = () => {
 
   const createCourse = async (data) => {
     try {
-      console.log("This is inside create course api call",data)
+      
       const response = await fetchData({
         url: "/api/courses",
         method: "POST",
@@ -107,6 +107,27 @@ const useAuthService = () => {
       return response;
     } catch (error) {
       console.log("Problem while creating course .", error);
+      return;
+    }
+  };
+
+  const updateStudent = async (data) => {
+    try {
+      const {studentId,courseId}=data
+      console.log("the student id and course id :", studentId,courseId)
+      const response = await fetchData({
+        url: `api/student/${studentId}/courses/${courseId}`,
+        method: "POST",
+        headers: { Authorization: accessToken },
+      });
+      if(response){
+        console.log("You have been successfully enrolled")
+        //TODO : dispatch(createCourses(response.data))
+      }
+      
+      return response;
+    } catch (error) {
+      console.log("Problem while updating student course list.", error);
       return;
     }
   };
@@ -334,7 +355,7 @@ const useAuthService = () => {
     try {
       const {id: lessonId, name: lessonName, courseId} = data;
       console.log("Lesson id , whose name i want to update", lessonId);
-      await fetchData({
+      const response = await fetchData({
         url: `/api/lessons/${lessonId}`,
         method: "PUT",
         data: { lessonName },
@@ -343,8 +364,13 @@ const useAuthService = () => {
           "Content-Type": "application/json",
         },
       });
+      if(response){
+        dispatch(editLessonName({courseId,lessonId, lessonName}))
 
-      dispatch(editLessonName({courseId,lessonId, lessonName}))
+      }
+
+
+      
     } catch {
       console.log("Error updating course Name");
     }
@@ -370,7 +396,8 @@ const useAuthService = () => {
     createLesson,
     createAdmin,
     getAllocatedCourses,
-    getAdminCourses
+    getAdminCourses,
+    updateStudent
   };
 };
 
