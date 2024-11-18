@@ -181,7 +181,6 @@ const useAuthService = () => {
       if (response) {
         dispatch(getAllCourses(response));
       }
-
       return response;
     } catch {
       console.log("Error while retrieving courses");
@@ -201,7 +200,6 @@ const useAuthService = () => {
       if (response) {
         dispatch(getAllCourses(response));
       }
-
       return response;
     } catch {
       console.log("Error while retrieving courses");

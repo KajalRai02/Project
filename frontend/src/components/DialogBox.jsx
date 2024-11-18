@@ -12,13 +12,13 @@ function DialogBox({ id, open, text, onClose, flag }) {
   const { deleteCourseById, deleteUserById } = useAuthService();
 
   const handleDelete = async (id) => {
-    console.log("hii from DialogBox")
+    
     if (flag === "admin") {
       await deleteCourseById(id);
     } else {
       await deleteUserById(id);
     }
-    onClose()
+    
   };
 
   return (
