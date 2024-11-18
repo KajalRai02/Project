@@ -9,16 +9,16 @@ import CreateButton from "../../components/Forms/CreateButton";
 import { useParams } from "react-router-dom";
 
 function AdminDashboard() {
-  const { getAdminCourses, loading, createCourse } = useAuthService();
+  const { getAdminCourses, createCourse } = useAuthService();
   const data = useSelector((state) => state.dashboard.courses);
 
-  const {adminId}=useParams();
+  const { adminId } = useParams();
   const [showForm, setShowForm] = useState(false);
 
   useEffect(() => {
     const fetchCourses = async () => {
       //await getCourses();
-      
+
       await getAdminCourses(adminId);
     };
     fetchCourses();
@@ -31,8 +31,8 @@ function AdminDashboard() {
   return (
     <>
       <Header />
-      <div>AdminDashboard</div>
-      {data ? <Dashboard arr={data} flag="admin" /> : loading}
+      <h1>Admin Dashboard</h1>
+      {data && <Dashboard arr={data} flag="admin" />}
 
       <CreateButton onClick={() => setShowForm(true)} />
 

@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 function SuperAdminDashboard() {
   const navigate = useNavigate();
 
-  const { getUsers, loading } = useAuthService();
+  const { getUsers } = useAuthService();
   const userData = useSelector((state) => state.dashboard.users);
 
   useEffect(() => {
@@ -26,9 +26,9 @@ function SuperAdminDashboard() {
   return (
     <>
       <Header />
-      <div>SuperAdminDashboard</div>
+      <h1>SuperAdmin Dashboard</h1>
 
-      {userData ? <Dashboard arr={userData} flag="superadmin" /> : loading}
+      {userData && <Dashboard arr={userData} flag="superadmin" /> }
       <CreateButton onClick={handleClick} />
     </>
   );

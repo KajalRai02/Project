@@ -16,6 +16,8 @@ import DialogBox from "./DialogBox";
 import { useState } from "react";
 import useAuthService from "../services/AuthService";
 import EditForm from "./EditForm";
+import { useSelector } from "react-redux";
+import CircularSpinner from "./Forms/CircularSpinner";
 
 function Dashboard({ arr, flag }) {
   const { updateCourseStatus, updateUserStatus, updateCourse } =
@@ -23,10 +25,12 @@ function Dashboard({ arr, flag }) {
 
   const [deleteId, setDeleteId] = useState(null);
   const [open, setOpen] = useState(false);
-  const [editId, setEditId] = useState(null); // Using only editId to control edit form visibility
+  const [editId, setEditId] = useState(null); 
 
   const handleEditOpen = (id) => setEditId(id);
-  const handleEditClose = () => setEditId(null); // Close by setting editId to null
+  const handleEditClose = () => setEditId(null); 
+
+  const loading = useSelector((state) => state.loading.loading);
 
   const handleDelete = (id) => {
     setDeleteId(id);
@@ -34,9 +38,14 @@ function Dashboard({ arr, flag }) {
   };
 
   function handleClose() {
-    setOpen(false);
+    console.log("this is handleClose function in Dashboard")
+    setTimeout(()=>{
+      setDeleteId(null);
+      setOpen(false);
 
-    setDeleteId(null);
+    })
+    
+    
   }
 
   const handleStatus = async (id, status) => {
@@ -112,17 +121,20 @@ function Dashboard({ arr, flag }) {
         </Table>
       </TableContainer>
 
-      {editId && (
-        <EditForm
-          open={Boolean(editId)}
-          close={handleEditClose}
-          id={editId}
-          name={arr.find((item) => item.id === editId)?.courseName || ""}
-          type="course"
-          apiCalls={updateCourse}
-          courseId={editId}
-        />
-      )}
+      {editId &&
+        (loading ? (
+          <CircularSpinner />
+        ) : (
+          <EditForm
+            open={Boolean(editId)}
+            close={handleEditClose}
+            id={editId}
+            name={arr.find((item) => item.id === editId)?.courseName || ""}
+            type="course"
+            apiCalls={updateCourse}
+            courseId={editId}
+          />
+        ))}
     </>
   );
 }

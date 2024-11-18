@@ -5,14 +5,13 @@ import { setLoading } from "../store/loadingSlice";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../store/userSlice";
 import { resetDashboard } from "../store/dashboardSlice";
+import { toast } from "react-toastify";
 
 
 
 const useAxios = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate()
-
-
 
   const [error, setError] = useState("");
 
@@ -45,11 +44,13 @@ const useAxios = () => {
     },
     async (error) => {
       dispatch(setLoading(false));
+      toast.error("Some problem occured")
       console.log("Error printed inside response interceptors =", error);
       if (
         error.response && error.response.status === 401 && error.response.data?.message === "Invalid Token"
       ) {
-        // Todo : Add a toast to login again
+   
+        toast.info("You need to login again")
         
         localStorage.removeItem("accessToken");
         dispatch(logout())
@@ -95,24 +96,4 @@ const useAxios = () => {
 export default useAxios;
 
 
-// try {
-//   console.log("Trying to retrieve new access token");
-//   const refreshResponse = await fetchData({
-//     url: "/api/auth/refresh-Token",
-//     method: "POST",
-//     withCredentials: true,
-//   });
-
-//   const newAccessToken = refreshResponse.headers["authorization"];
-//   if (newAccessToken) {
-//     localStorage.setItem("accessToken", newAccessToken);
-
-//     originalRequest.headers[
-//       "Authorization"
-//     ] = `Bearer ${newAccessToken}`;
-//     return axiosInstance(originalRequest);
-//   }
-// } catch {
-//   console.log("Please log in again.");
-// }
 

@@ -2,13 +2,13 @@ import {
   Box,
   Button,
   Card,
-  CardActionArea,
   CardContent,
   CardMedia,
   Grid2,
 } from "@mui/material";
 import { DUMMY_COURSE } from "../../courseDashboard/CourseList";
 import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 
 function Dashboard({ items, type, apicalls = () => {} }) {
   const navigate = useNavigate();
@@ -18,15 +18,20 @@ function Dashboard({ items, type, apicalls = () => {} }) {
     if (type === "student") {
       navigate(`/courseView/${courseId}`);
     } else {
-        console.log("the student id and course id :", studentId,courseId)
-      const response = await apicalls({studentId, courseId});
+      
+      const response = await apicalls({ studentId, courseId });
       if (response) {
-        console.log("You are successfully enrolled in this course");
+        navigate(`/dashboard/STUDENT/${studentId}`);
+        toast.success("You are successfully enrolled in this course");
       } else {
-        console.log("Enroll failed");
+        toast.error("Enroll failed");
       }
     }
   }
+  const isEnrolled = (courseId) => {
+    const course = items.find((item) => item.id === courseId);
+    return course?.studentID?.includes(Number(studentId));
+  };
 
   return (
     <>
@@ -59,7 +64,11 @@ function Dashboard({ items, type, apicalls = () => {} }) {
                   variant="contained"
                   sx={{ bgcolor: "#167D7F" }}
                 >
-                  {type === "student" ? "View" : "Enroll Now"}
+                  {type === "student"
+                    ? "View"
+                    : isEnrolled(course.id)
+                    ? "Enrolled"
+                    : "Enroll Now"}
                 </Button>
               </Box>
             </Card>

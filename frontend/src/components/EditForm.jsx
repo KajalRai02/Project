@@ -5,8 +5,12 @@ import { Box, FormControl, TextField, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import EditIcon from "@mui/icons-material/Edit";
 import { useEffect } from "react";
+import { useSelector } from "react-redux";
+import CircularSpinner from "./Forms/CircularSpinner";
 
 function EditForm({ open, close, id, name, type, apiCalls, courseId }) {
+
+  const loading= useSelector(state=>state.loading.loading)
   const navigate = useNavigate();
 
   const { handleSubmit, control, setValue, watch , formState:{errors}} = useForm({
@@ -36,6 +40,7 @@ function EditForm({ open, close, id, name, type, apiCalls, courseId }) {
   return (
     <>
       <BasicModal open={open} close={close}>
+        {loading && <CircularSpinner /> }
         <Box
           component="form"
           onSubmit={handleSubmit(onSubmit)}

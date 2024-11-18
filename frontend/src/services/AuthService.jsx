@@ -1,11 +1,12 @@
 import useAxios from "../components/useAxios";
 import { useDispatch } from "react-redux";
+
 import {
   getAllCourses,
   getAllLessons,
   getAllUsers,
   deleteCourses,
-  // deleteUsers,
+  deleteUsers,
   getCourseStatus,
   getUserStatus,
   editCourseName,
@@ -15,12 +16,13 @@ import {
   createLessons,
   // createUserAdmin
 } from "../store/dashboardSlice";
+import { toast } from "react-toastify";
 
 const useAuthService = () => {
   const dispatch = useDispatch();
   const accessToken = localStorage.getItem("accessToken");
 
-  const { loading, error, fetchData } = useAxios();
+  const { error, fetchData } = useAxios();
 
   const loginAuth = async (data) => {
     try {
@@ -52,6 +54,9 @@ const useAuthService = () => {
           email: data.Email,
         },
       });
+      if (response) {
+        toast.success("Registered successfully");
+      }
       return response;
     } catch (error) {
       console.log("Problem while registering .", error);
@@ -61,14 +66,16 @@ const useAuthService = () => {
 
   const logoutAuth = async () => {
     //remove data from token table and remove refresh token from backend
-    await fetchData({
+    const response = await fetchData({
       url: "/api/auth/logout",
       method: "POST",
       headers: { Authorization: accessToken },
     });
-
-    //remove local storage
-    localStorage.removeItem("accessToken");
+    if (response) {
+      toast.success("Successfully logged out");
+      //remove local storage
+      localStorage.removeItem("accessToken");
+    }
   };
 
   const createAdmin = async (data) => {
@@ -85,6 +92,9 @@ const useAuthService = () => {
       });
       //No need for dispatch here because the data is fetched on navigating
       //dispatch(createUserAdmin(response.data))
+      if (response) {
+        toast.success("New Admin created");
+      }
       return response;
     } catch (error) {
       console.log("Problem while creating course .", error);
@@ -94,7 +104,6 @@ const useAuthService = () => {
 
   const createCourse = async (data) => {
     try {
-      
       const response = await fetchData({
         url: "/api/courses",
         method: "POST",
@@ -103,7 +112,10 @@ const useAuthService = () => {
         },
         headers: { Authorization: accessToken },
       });
-      dispatch(createCourses(response.data))
+      if (response) {
+        toast.success("Course created successfully");
+        dispatch(createCourses(response.data));
+      }
       return response;
     } catch (error) {
       console.log("Problem while creating course .", error);
@@ -113,18 +125,18 @@ const useAuthService = () => {
 
   const updateStudent = async (data) => {
     try {
-      const {studentId,courseId}=data
-      console.log("the student id and course id :", studentId,courseId)
+      const { studentId, courseId } = data;
+      console.log("the student id and course id :", studentId, courseId);
       const response = await fetchData({
         url: `api/student/${studentId}/courses/${courseId}`,
         method: "POST",
         headers: { Authorization: accessToken },
       });
-      if(response){
-        console.log("You have been successfully enrolled")
+      if (response) {
+        console.log("You have been successfully enrolled");
         //TODO : dispatch(createCourses(response.data))
       }
-      
+
       return response;
     } catch (error) {
       console.log("Problem while updating student course list.", error);
@@ -132,20 +144,23 @@ const useAuthService = () => {
     }
   };
 
-  const createLesson= async (data) => {
+  const createLesson = async (data) => {
     try {
-      const {name, courseId}=data
-      console.log(name,courseId)
+      const { name, courseId } = data;
       const response = await fetchData({
         url: "/api/lessons",
         method: "POST",
         data: {
           lessonName: name,
-          courseId
+          courseId,
         },
         headers: { Authorization: accessToken },
       });
-      dispatch(createLessons(response.data))
+      if (response) {
+        toast.success("Lesson created");
+        dispatch(createLessons(response.data));
+      }
+
       return response;
     } catch (error) {
       console.log("Problem while creating lesson .", error);
@@ -163,7 +178,9 @@ const useAuthService = () => {
         })
       ).data;
 
-      dispatch(getAllCourses(response));
+      if (response) {
+        dispatch(getAllCourses(response));
+      }
 
       return response;
     } catch {
@@ -181,7 +198,9 @@ const useAuthService = () => {
         })
       ).data;
 
-      dispatch(getAllCourses(response));
+      if (response) {
+        dispatch(getAllCourses(response));
+      }
 
       return response;
     } catch {
@@ -198,17 +217,17 @@ const useAuthService = () => {
           headers: { Authorization: accessToken },
         })
       ).data;
+      if (response) {
+        dispatch(getAllCourses(response));
+      }
 
-      dispatch(getAllCourses(response));
-
-      console.log(response)
+      console.log(response);
 
       return response;
     } catch {
       console.log("Error while retrieving courses");
     }
   };
-
 
   const getLessons = async () => {
     try {
@@ -219,8 +238,9 @@ const useAuthService = () => {
           headers: { Authorization: accessToken },
         })
       ).data;
-
-      dispatch(getAllLessons(response));
+      if (response) {
+        dispatch(getAllLessons(response));
+      }
 
       return response;
     } catch {
@@ -237,8 +257,9 @@ const useAuthService = () => {
           headers: { Authorization: accessToken },
         })
       ).data;
-      console.log(response);
-      dispatch(getAllUsers(response));
+      if (response) {
+        dispatch(getAllUsers(response));
+      }
 
       return response;
     } catch {
@@ -248,27 +269,30 @@ const useAuthService = () => {
 
   const deleteCourseById = async (CourseId) => {
     try {
-      await fetchData({
+      const response = await fetchData({
         url: `/api/courses/${CourseId}`,
         method: "DELETE",
         headers: { Authorization: accessToken },
       });
-
-      dispatch(deleteCourses(CourseId));
-      console.log("deleted");
+      if (response) {
+        toast.success("Course successfully deleted");
+        dispatch(deleteCourses(CourseId));
+      }
     } catch {
       console.log("Error deleting courses by Id");
     }
   };
-  const deleteLessonById = async (lessonId,courseId) => {
+  const deleteLessonById = async (lessonId, courseId) => {
     try {
-      await fetchData({
+      const response = await fetchData({
         url: `/api/lessons/${lessonId}`,
         method: "DELETE",
         headers: { Authorization: accessToken },
       });
-
-      dispatch(deleteLesson({lessonId,courseId}));
+      if (response) {
+        toast.success("Lesson deleted successfully.");
+        dispatch(deleteLesson({ lessonId, courseId }));
+      }
     } catch {
       console.log("Error deleting courses by Id");
     }
@@ -276,14 +300,16 @@ const useAuthService = () => {
 
   const deleteUserById = async (userId) => {
     try {
-      console.log(userId)
-      await fetchData({
+      const response = await fetchData({
         url: `/superAdmins/users/${userId}`,
         method: "DELETE",
         headers: { Authorization: accessToken },
       });
 
-      //dispatch(deleteUsers(userId));
+      if (response) {
+        toast.success("User deleted");
+        dispatch(deleteUsers(userId));
+      }
     } catch {
       console.log("Error deleting users by Id");
     }
@@ -294,7 +320,7 @@ const useAuthService = () => {
       console.log("Active Id that we are sending:", activeId);
       console.log("Request body: ", JSON.stringify({ activeId }));
 
-      await fetchData({
+      const response = await fetchData({
         url: `/api/courses/update/status/${CourseId}`,
         method: "PUT",
         data: { activeId },
@@ -303,8 +329,9 @@ const useAuthService = () => {
           "Content-Type": "application/json",
         },
       });
-
-      dispatch(getCourseStatus({ CourseId, active: !status }));
+      if (response) {
+        dispatch(getCourseStatus({ CourseId, active: !status }));
+      }
     } catch {
       console.log("Error updating course status");
     }
@@ -312,10 +339,7 @@ const useAuthService = () => {
 
   const updateUserStatus = async (userId, status, activeId) => {
     try {
-      console.log("Active Id that we are sending:", activeId);
-      console.log("Request body: ", JSON.stringify({ activeId }));
-
-      await fetchData({
+      const response = await fetchData({
         url: `/superAdmins/users/${userId}`,
         method: "PUT",
         data: { activeId },
@@ -324,8 +348,9 @@ const useAuthService = () => {
           "Content-Type": "application/json",
         },
       });
-
-      dispatch(getUserStatus({ userId, active: !status }));
+      if (response) {
+        dispatch(getUserStatus({ userId, active: !status }));
+      }
     } catch {
       console.log("Error updating user status");
     }
@@ -333,9 +358,9 @@ const useAuthService = () => {
 
   const updateCourse = async (data) => {
     try {
-      const { id: courseId, name: courseName } = data
+      const { id: courseId, name: courseName } = data;
       console.log("Course id , whose name i want to update", courseId);
-      await fetchData({
+      const response = await fetchData({
         url: `/api/courses/${courseId}`,
         method: "PUT",
         data: { courseName },
@@ -345,7 +370,9 @@ const useAuthService = () => {
         },
       });
 
-      dispatch(editCourseName({courseId, courseName}))
+      if (response) {
+        dispatch(editCourseName({ courseId, courseName }));
+      }
     } catch {
       console.log("Error updating course Name");
     }
@@ -353,7 +380,7 @@ const useAuthService = () => {
 
   const updateLesson = async (data) => {
     try {
-      const {id: lessonId, name: lessonName, courseId} = data;
+      const { id: lessonId, name: lessonName, courseId } = data;
       console.log("Lesson id , whose name i want to update", lessonId);
       const response = await fetchData({
         url: `/api/lessons/${lessonId}`,
@@ -364,13 +391,9 @@ const useAuthService = () => {
           "Content-Type": "application/json",
         },
       });
-      if(response){
-        dispatch(editLessonName({courseId,lessonId, lessonName}))
-
+      if (response) {
+        dispatch(editLessonName({ courseId, lessonId, lessonName }));
       }
-
-
-      
     } catch {
       console.log("Error updating course Name");
     }
@@ -378,7 +401,6 @@ const useAuthService = () => {
 
   return {
     error,
-    loading,
     loginAuth,
     registerAuth,
     logoutAuth,
@@ -397,7 +419,7 @@ const useAuthService = () => {
     createAdmin,
     getAllocatedCourses,
     getAdminCourses,
-    updateStudent
+    updateStudent,
   };
 };
 

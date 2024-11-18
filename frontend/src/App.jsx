@@ -10,8 +10,7 @@ import StudentDashboard from "./pages/studentDashboard/StudentDashboard";
 import RequiredAuth from "./components/RequiredAuth";
 import Unauthorized from "./components/Unauthorized";
 import NotFoundPage from "./components/Forms/NotFoundPage";
-import CircularSpinner from "./components/Forms/CircularSpinner";
-import { useSelector } from "react-redux";
+import { ToastContainer } from 'react-toastify';
 import CoursesDashboard from "./pages/studentDashboard/CoursesDashboard";
 
 function App() {
@@ -63,6 +62,7 @@ function App() {
        {/* {loading && <CircularSpinner />} */}
        {/* {!loading && <RouterProvider router={router} />} */}
        <RouterProvider router={router} />
+       <ToastContainer />
     </>
   )
 }

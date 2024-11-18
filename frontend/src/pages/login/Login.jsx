@@ -8,6 +8,10 @@ import { useNavigate } from "react-router-dom";
 
 import useAuthService from "../../services/AuthService";
 import CircularSpinner from "../../components/Forms/CircularSpinner";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+import { useSelector } from "react-redux";
 
 function LoginPage() {
   const {
@@ -16,9 +20,10 @@ function LoginPage() {
     formState: { errors, isSubmitting },
   } = useForm();
 
-  const { error, loading, loginAuth } = useAuthService();
+  const { error, loginAuth } = useAuthService();
 
-  //const {  loading,error,fetchData } = useAxios();
+  const loading = useSelector((state) => state.loading.loading);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -31,7 +36,13 @@ function LoginPage() {
         username: response.userName,
         role: response.roles,
       };
-      dispatch(login(user));
+      if (response) {
+        toast.success("Successfully logged in");
+        dispatch(login(user));
+      }else{
+        toast.error("Could not login")
+      }
+
       if (response.roles === "SUPER_ADMIN") {
         navigate(`/dashboard/${response.roles}`);
       } else {
@@ -40,7 +51,7 @@ function LoginPage() {
     } catch {
       console.log("error occured");
     }
-    //TODO : if response is null , undefined or error , make sure this portion of code is not executed
+    
   };
 
   return (

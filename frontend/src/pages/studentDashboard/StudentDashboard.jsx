@@ -32,7 +32,8 @@ function StudentDashboard() {
 
   return (
     <>
-      <Header studentId={studentId}/>
+      <Header studentId={studentId} type="student"/>
+      <h1>Student Dashboard</h1>
       <Divider variant="fullWidth" flexItem />
       <Dashboard items={courses} type="student" />
     </>

@@ -7,7 +7,7 @@ import { resetDashboard } from "../store/dashboardSlice";
 import useAuthService from "../services/AuthService";
 import { useNavigate } from "react-router-dom";
 
-const Header = ({studentId }) => {
+const Header = ({studentId , type}) => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -52,9 +52,9 @@ const Header = ({studentId }) => {
           </>
         ) : (
           <>
-            <Button onClick={handleCourses} color="inherit">
+           { type==='student' && <Button onClick={handleCourses} color="inherit">
               Courses
-            </Button>
+            </Button>}
             <Button onClick={handleLogout} color="inherit">
               Logout
             </Button>

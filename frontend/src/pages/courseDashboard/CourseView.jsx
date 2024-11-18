@@ -46,8 +46,8 @@ const theme = createTheme({
 
 function CourseView() {
   const [activeButton, setActiveButton] = useState(null);
-  const [openEditModal, setOpenEditModal] = useState(false); // state to control modal visibility
-  const [editLesson, setEditLesson] = useState(null); // store lesson to edit
+  const [openEditModal, setOpenEditModal] = useState(false); 
+  const [editLesson, setEditLesson] = useState(null); 
 
   const [showForm, setShowForm] = useState(false);
 
@@ -58,6 +58,7 @@ function CourseView() {
   const userRole = useSelector((state) => state.auth.user.role);
 
   const course = courses.find((course) => course.id === parseInt(courseId));
+
 
   function handleClose() {
     setShowForm(false);
@@ -75,6 +76,15 @@ function CourseView() {
 
     console.log("Deleted lesson with id:", lessonId);
   };
+
+  if(!course) {
+    return (
+    <>
+      <Header />
+      <h1>This course does not exist</h1>
+    </>
+    )
+  }
 
   return (
     <>
@@ -189,7 +199,7 @@ function CourseView() {
         </Grid2>
       </Grid2>
 
-      <CreateButton onClick={() => setShowForm(true)} />
+      {userRole === "ADMIN" && <CreateButton onClick={() => setShowForm(true)} />}
 
       {showForm && userRole === "ADMIN" && (
         <CreateForm

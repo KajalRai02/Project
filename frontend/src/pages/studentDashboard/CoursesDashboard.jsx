@@ -19,6 +19,7 @@ function CoursesDashboard() {
       const filteredCourses = allotedCourses.map((course) => ({
         courseName: course.courseName,
         id: course.id,
+        studentID:course.studentID
       }));
 
       setCourses(filteredCourses);
@@ -29,6 +30,7 @@ function CoursesDashboard() {
   return (
     <>
       <Header />
+      <h1>All Courses</h1>
       <Divider variant="fullWidth" flexItem />
       <Dashboard items={courses} type="course" apicalls={updateStudent}/>
     </>
