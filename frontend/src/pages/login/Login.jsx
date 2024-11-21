@@ -13,7 +13,10 @@ import "react-toastify/dist/ReactToastify.css";
 
 import { useSelector } from "react-redux";
 
+
+
 function LoginPage() {
+
   const {
     register,
     handleSubmit,
@@ -22,10 +25,13 @@ function LoginPage() {
 
   const { error, loginAuth } = useAuthService();
 
-  const loading = useSelector((state) => state.loading.loading);
+
+
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  
 
   const onSubmit = async (data) => {
     try {
@@ -55,18 +61,17 @@ function LoginPage() {
   };
 
   return (
+    
     <PageLayout>
       {error && <p>Invalid Credentials</p>}
-      {loading ? (
-        <CircularSpinner />
-      ) : (
+      
         <LoginForm
           onSubmit={handleSubmit(onSubmit)}
           register={register}
           errors={errors}
           isSubmitting={isSubmitting}
         />
-      )}
+      
     </PageLayout>
   );
 }

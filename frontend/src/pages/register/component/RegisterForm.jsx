@@ -9,9 +9,23 @@ import {
   Typography,
   Paper,
 } from "@mui/material";
+import useAuthService from "../../../services/AuthService";
 
-const RegisterForm = ({ onSubmit, register, errors, isSubmitting, title }) => {
+const RegisterForm = ({ onSubmit, register, errors, isSubmitting, title,setError }) => {
+
+  const {validateUserName}= useAuthService()
+
+  const validatingUserName=async(username)=>{
+    const isAvailable =await validateUserName(username)
+    if(isAvailable){
+      return true
+    }
+
+    return "Username already exists"
+  }
+
   return (
+
     <Paper
       elevation={24}
       sx={{
@@ -42,8 +56,11 @@ const RegisterForm = ({ onSubmit, register, errors, isSubmitting, title }) => {
             id="outlined-username"
             label="Username"
             {...register("Username", {
+              validate: validatingUserName,
               required: "Username is required",
               maxLength: 20,
+            
+              
             })}
           />
           <FormHelperText>{errors.Username?.message}</FormHelperText>

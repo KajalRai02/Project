@@ -24,8 +24,6 @@ function RegisterPage() {
 
   const { error, registerAuth, createAdmin } = useAuthService();
   const navigate = useNavigate();
-  const loading = useSelector((state) => state.loading.loading);
-
 
   const onSubmit = async (data) => {
     try {
@@ -38,7 +36,6 @@ function RegisterPage() {
       } else {
         const register = await registerAuth(data);
         if (register) {
-         
           navigate("/login");
         }
       }
@@ -49,17 +46,14 @@ function RegisterPage() {
 
   return (
     <PageLayout>
-      {loading ? (
-        <CircularSpinner />
-      ) : (
-        <RegisterForm
-          onSubmit={handleSubmit(onSubmit)}
-          register={register}
-          errors={errors}
-          isSubmitting={isSubmitting}
-          title={title}
-        />
-      )}
+      <RegisterForm
+        onSubmit={handleSubmit(onSubmit)}
+        register={register}
+        errors={errors}
+        isSubmitting={isSubmitting}
+        title={title}
+        
+      />
     </PageLayout>
   );
 }

@@ -2,8 +2,7 @@ import { useForm, Controller } from "react-hook-form";
 import { TextField, Box } from "@mui/material";
 import BasicButton from "./Forms/BasicButton";
 import BasicModal from "./Forms/BasicModal";
-import { useSelector } from "react-redux";
-import CircularSpinner from "./Forms/CircularSpinner";
+
 
 const CreateForm = ({ name, label, open, close, apiCalls, courseId }) => {
   const {
@@ -12,17 +11,17 @@ const CreateForm = ({ name, label, open, close, apiCalls, courseId }) => {
     formState: { errors },
   } = useForm();
 
-  const loading = useSelector(state=>state.loading.loading)
+
 
   const onSubmit = async (data) => {
-    console.log(data, " ", courseId);
+    
     //backend api call to create course , lesson or user
     await apiCalls({ name: data[name], courseId });
     close();
   };
   return (
     <BasicModal open={open} close={close}>
-      {loading && <CircularSpinner /> }
+
       <form onSubmit={handleSubmit(onSubmit)}>
         <Controller
           name={name}

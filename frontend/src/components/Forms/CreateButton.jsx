@@ -11,7 +11,7 @@ function CreateButton({onClick}) {
             position: 'fixed', 
             bottom: '20px',    
             right: '20px',    
-            zIndex: 1000,      
+            zIndex: 100,      
             boxShadow: 3,      
             '&:hover': {
               boxShadow: 6,    

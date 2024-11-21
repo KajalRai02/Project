@@ -24,6 +24,29 @@ const useAuthService = () => {
 
   const { error, fetchData } = useAxios();
 
+
+  const  validateUserName = async(username)=>{
+    try {
+      const response = (
+        await fetchData({
+          url: "/api/auth/check/username",
+          method: "POST",
+          data: {
+            userName: username,
+          },
+        })
+      );
+      if(response.data.statusCode == 400){
+        return false
+      }return true
+    
+    } catch  {
+      console.log("Username already exists");
+      return false;
+    }
+
+  };
+
   const loginAuth = async (data) => {
     try {
       const response = (
@@ -418,6 +441,7 @@ const useAuthService = () => {
     getAllocatedCourses,
     getAdminCourses,
     updateStudent,
+    validateUserName
   };
 };
 

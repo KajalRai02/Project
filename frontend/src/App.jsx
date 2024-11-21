@@ -10,14 +10,11 @@ import StudentDashboard from "./pages/studentDashboard/StudentDashboard";
 import RequiredAuth from "./components/RequiredAuth";
 import Unauthorized from "./components/Unauthorized";
 import NotFoundPage from "./components/Forms/NotFoundPage";
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer } from "react-toastify";
 import CoursesDashboard from "./pages/studentDashboard/CoursesDashboard";
+import CircularSpinner from "./components/Forms/CircularSpinner";
 
 function App() {
-
-  //const loading = useSelector((state) => state.loading.loading);
-  
-
   const router = createBrowserRouter([
     { path: "/", element: <HomePage /> },
     { path: "/login", element: <LoginPage /> },
@@ -41,8 +38,10 @@ function App() {
       element: <RequiredAuth allowedRoles={["STUDENT"]} />,
       children: [
         { path: "STUDENT/:studentId", element: <StudentDashboard /> },
-        { path: "STUDENT/:studentId/view/courses", element: <CoursesDashboard /> }
-
+        {
+          path: "STUDENT/:studentId/view/courses",
+          element: <CoursesDashboard />,
+        },
       ],
     },
 
@@ -51,20 +50,17 @@ function App() {
       element: <RequiredAuth allowedRoles={["STUDENT", "ADMIN"]} />,
       children: [{ path: "courseView/:courseId", element: <CourseView /> }],
     },
-    
 
     { path: "*", element: <NotFoundPage /> },
-    
   ]);
 
   return (
     <>
-       {/* {loading && <CircularSpinner />} */}
-       {/* {!loading && <RouterProvider router={router} />} */}
-       <RouterProvider router={router} />
-       <ToastContainer />
+      <CircularSpinner />
+      <RouterProvider router={router} />
+      <ToastContainer />
     </>
-  )
+  );
 }
 
 export default App;

@@ -34,7 +34,7 @@ function Dashboard({ arr, flag }) {
   };
 
   function handleClose() {
-    // console.log("this is handleClose function in Dashboard")
+   
     setTimeout(() => {
       setDeleteId(null);
       setOpen(false);
